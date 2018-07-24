@@ -77,7 +77,7 @@ class Home extends Component {
         <div style={styles.firstsection}>
           <Grid container spacing={24}>
             <Grid item xs={12} sm={6}>
-              <img style={styles.infoContainerImage} alt="People working"/>
+              <img style={styles.infoContainerImage}/>
             </Grid>
             <Grid item xs={12} sm={6} style={styles.infotextwrapper}>
               <Typography style={styles.infotext} variant='body1'>

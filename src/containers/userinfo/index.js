@@ -63,12 +63,12 @@ class UserInfo extends Component {
   );
 
   render() {
-    const firstName = this.props.firstName;
+    const request = this.props.request;
     const { handleSubmit, pristine, reset, submitting } = this.props;
     return (
       <div style={styles.bodyStyle}>
         {this.state.submitted ? (
-          !firstName ? (
+          request ? (
             <div>
               <div className="cssload-bell">
                 <div className="cssload-circle">
@@ -100,13 +100,19 @@ class UserInfo extends Component {
                   <Typography gutterBottom variant="headline" component="h2">
                     {this.props.user.firstName} {this.props.user.lastName}
                   </Typography>
-                  <Typography component="p">Email: {this.props.user.email}</Typography>
-                  <Typography component="p">Profession: {this.props.user.profession}</Typography>
                   <Typography component="p">
-                    {this.props.user.firstName} is currently seeking {this.props.user.seeking}
+                    Email: {this.props.user.email}
                   </Typography>
                   <Typography component="p">
-                    {this.props.user.firstName} had this to add: {this.props.user.note}
+                    Profession: {this.props.user.profession}
+                  </Typography>
+                  <Typography component="p">
+                    {this.props.user.firstName} is currently seeking{' '}
+                    {this.props.user.seeking}
+                  </Typography>
+                  <Typography component="p">
+                    {this.props.user.firstName} had this to add:{' '}
+                    {this.props.user.note}
                   </Typography>
                 </CardContent>
                 <CardActions>
@@ -122,7 +128,10 @@ class UserInfo extends Component {
           )
         ) : (
           <Paper elevation={3}>
-            <form onSubmit={handleSubmit(this.onSubmit.bind(this))} style={styles.form}>
+            <form
+              onSubmit={handleSubmit(this.onSubmit.bind(this))}
+              style={styles.form}
+            >
               <h2>Update your information</h2>
               <div>
                 <Field
@@ -141,7 +150,12 @@ class UserInfo extends Component {
                 />
               </div>
               <div>
-                <Field name="email" component={this.renderTextField} label="email" type="email" />
+                <Field
+                  name="email"
+                  component={this.renderTextField}
+                  label="email"
+                  type="email"
+                />
               </div>
               <div>
                 <Field
@@ -208,7 +222,8 @@ const mapStateToProps = state => ({
   id: state.authenticated.user.id,
   name: state.authenticated.user.name,
   firstName: state.user.user.firstName,
-  user: state.user.user
+  user: state.user.user,
+  request: state.user.request
 });
 
 const mapDispatchToProps = dispatch =>

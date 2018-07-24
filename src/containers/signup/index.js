@@ -5,17 +5,44 @@ import { Field, reduxForm } from 'redux-form';
 import { signup } from '../../modules/signup';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+
 import './signup.css';
 
-class SignUp extends Component {
-  enterField(field) {
-    return (
-      <div>
-        <label>{field.label}</label>
-        <input type="text" {...field.input} />
-      </div>
-    );
+const styles = {
+  bodyStyle: {
+    paddingTop: '7vh',
+    height: `50vh`,
+    display: `flex`,
+    alignItems: `center`,
+    justifyContent: `center`
+  },
+  buttonStyles: {
+    padding: `20px 0px`
+  },
+  button: {
+    marginLeft: `5px`
+  },
+  form: {
+    padding: `30px 30px`
+  },
+  textfield: {
+    width: `400px`
   }
+};
+
+class SignUp extends Component {
+  renderTextField = ({ input, label, meta: { touched, error }, ...custom }) => (
+    <TextField
+      label={label}
+      error={touched && error}
+      style={styles.textfield}
+      {...input}
+      {...custom}
+    />
+  );
 
   onSubmit(values) {
     console.log(values);
@@ -24,14 +51,11 @@ class SignUp extends Component {
 
   render() {
     const request = this.props.request;
-    console.log(request);
-    const { handleSubmit } = this.props;
+    const { handleSubmit, pristine, reset, submitting } = this.props;
     return (
-      <div style={{ paddingTop: '7vh' }}>
-        <h2>Sign up!</h2>
+      <div style={styles.bodyStyle}>
         {request ? (
           <div>
-            <h2>Loading...</h2>
             <div className="cssload-bell">
               <div className="cssload-circle">
                 <div className="cssload-inner" />
@@ -51,12 +75,46 @@ class SignUp extends Component {
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-            <Field label="Username" name="username" component={this.enterField} />
-            <Field label="Password" name="password" component={this.enterField} />
-            <button type="submit">Submit</button>
-            <Link to="/">Return home</Link>
-          </form>
+          <Paper elevation={3}>
+            <form onSubmit={handleSubmit(this.onSubmit.bind(this))} style={styles.form}>
+              <h2>Sign Up!</h2>
+              <div>
+                <Field
+                  name="username"
+                  component={this.renderTextField}
+                  label="username"
+                  type="text"
+                />
+              </div>
+              <div>
+                <Field
+                  name="password"
+                  component={this.renderTextField}
+                  label="password"
+                  type="password"
+                />
+              </div>
+              <div style={styles.buttonStyles}>
+                <Button
+                  type="submit"
+                  disabled={pristine || submitting}
+                  variant={'outlined'}
+                  style={styles.button}
+                >
+                  Submit
+                </Button>
+                <Button
+                  type="button"
+                  disabled={pristine || submitting}
+                  onClick={reset}
+                  variant={'outlined'}
+                  style={styles.button}
+                >
+                  Clear Values
+                </Button>
+              </div>
+            </form>
+          </Paper>
         )}
       </div>
     );
@@ -76,21 +134,19 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-function validate(values) {
-  const errors = {};
-
-  if (!values.username) {
-    errors.username = 'Enter a username!';
+  function validate(values) {
+    const errors = {};
+    const requiredFields = ['username', 'password'];
+    requiredFields.forEach(field => {
+      if (!values[field]) {
+        errors[field] = true;
+      }
+    });
+    console.log(errors)
+    return errors;
   }
 
-  if (!values.password) {
-    errors.password = "Don't forget your password!";
-  }
-
-  return errors;
-}
-
-export default reduxForm({ validate, form: 'LogInFormAttempt' })(
+export default reduxForm({ validate, form: 'SignUpForm' })(
   connect(
     mapStateToProps,
     mapDispatchToProps
