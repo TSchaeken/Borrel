@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid'
 import { retrieveUsers } from '../../modules/user';
 
 const styles = {
@@ -29,7 +30,8 @@ const styles = {
     width: `400px`
   },
   card: {
-    maxWidth: 345
+    maxWidth: 345,
+    margin: '0 50px'
   },
   media: {
     height: 0,
@@ -49,7 +51,7 @@ class RetrievedUsers extends Component {
     
     
     return(
-      <div key={peopleData.firstName}>
+      <Grid item xs={4} key={peopleData.firstName}>
         <Card style={styles.card}>
           <CardMedia
             style={styles.media}
@@ -78,7 +80,7 @@ class RetrievedUsers extends Component {
             </Button>
           </CardActions>
         </Card>
-      </div>
+      </Grid>
     );
   }
 
@@ -107,7 +109,7 @@ class RetrievedUsers extends Component {
             </div>
           </div>
         ) : (
-          <div>{this.props.seeking.map(this.renderCard)}</div>
+          <Grid container>{this.props.seeking.map(this.renderCard)}</Grid>
         )}
       </div>
     );
